@@ -1,0 +1,372 @@
+"""
+Sort directions
+"""
+enum SortDir {
+  ASC
+  DESC
+}
+
+"""
+Privacy levels
+"""
+enum PastePrivacy {
+  PUBLIC_ANON
+  UNLISTED_ANON
+  PRIVATE_USER
+  PUBLIC_USER
+}
+"""
+String, ISO format
+"""
+scalar Date
+
+"""
+Detailed paste return type (lists)
+"""
+type PastebinPasteDetailed {
+  id: ID!
+  date: Date
+  title: String
+  privacy: PastePrivacy
+  hits: Int
+  url: String!
+  content: String
+}
+
+"""
+Self descriptive
+"""
+type Author {
+  name: String
+  books: [Book]
+}
+
+"""
+Self descriptive
+"""
+type Book {
+  id: Int
+  title(lang: String): String
+  isbn: String
+  authors(sortDir: SortDir): [Author]
+}
+
+"""
+String, starts with http(s)://)
+"""
+scalar Url
+
+"""
+String, it contains '@'
+"""
+scalar Email
+
+"""
+Possible user levels
+"""
+enum UserType {
+  FREE
+  PRO
+}
+
+"""
+It describe a PasteBin user
+"""
+type UserInfo {
+  username: String!
+  avatar: Url
+  website: Url
+  email: Email
+  location: String
+  type: UserType
+}
+
+"""
+Root Query type
+"""
+type Query {
+  hello: String
+  author(id: ID!): Author
+  book(id: ID!): Book
+  paste(id: ID!): String
+  listUserPastes(limit: Int = 3): [PastebinPasteDetailed]!
+  listTrendingPastes(count: Int = 5): [PastebinPasteDetailed]
+  pastebinUserInfo: UserInfo
+}
+
+"""
+Input declaration for createpaste method
+"""
+input CreatePasteInput {
+  title: String
+  content: String!
+  format: PastebinSyntaxHighlight
+  privacy: PastePrivacy = PUBLIC
+}
+
+"""
+Root mutation 
+"""
+type Mutation {
+  createPaste(input: CreatePasteInput): String
+  deletePaste(id: String!): String
+}
+
+"""
+Pastebin supported syntaxies
+"""
+enum PastebinSyntaxHighlight {
+  SYNTAX_4CS
+  SYNTAX_6502_ACME_Cross_Assembler
+  SYNTAX_6502_Kick_Assembler
+  SYNTAX_6502_TASM_64TASS
+  SYNTAX_ABAP
+  SYNTAX_ActionScript
+  SYNTAX_ActionScript_3
+  SYNTAX_Ada
+  SYNTAX_AIMMS
+  SYNTAX_ALGOL_68
+  SYNTAX_Apache_Log
+  SYNTAX_AppleScript
+  SYNTAX_APT_Sources
+  SYNTAX_ARM
+  SYNTAX_ASM_NASM
+  SYNTAX_ASP
+  SYNTAX_Asymptote
+  SYNTAX_autoconf
+  SYNTAX_Autohotkey
+  SYNTAX_AutoIt
+  SYNTAX_Avisynth
+  SYNTAX_Awk
+  SYNTAX_BASCOM_AVR
+  SYNTAX_Bash
+  SYNTAX_Basic4GL
+  SYNTAX_Batch
+  SYNTAX_BibTeX
+  SYNTAX_Blitz_Basic
+  SYNTAX_Blitz3D
+  SYNTAX_BlitzMax
+  SYNTAX_BNF
+  SYNTAX_BOO
+  SYNTAX_BrainFuck
+  SYNTAX_C
+  SYNTAX_C_WinAPI
+  SYNTAX_C_for_Macs
+  SYNTAX_C_Intermediate_Language
+  SYNTAX_C_sharp
+  SYNTAX_CPP
+  SYNTAX_CPP_WinAPI
+  SYNTAX_CPP_QT
+  SYNTAX_C_Loadrunner
+  SYNTAX_CAD_DCL
+  SYNTAX_CAD_Lisp
+  SYNTAX_Ceylon
+  SYNTAX_CFDG
+  SYNTAX_ChaiScript
+  SYNTAX_Chapel
+  SYNTAX_Clojure
+  SYNTAX_Clone_C
+  SYNTAX_Clone_CPP
+  SYNTAX_CMake
+  SYNTAX_COBOL
+  SYNTAX_CoffeeScript
+  SYNTAX_ColdFusion
+  SYNTAX_CSS
+  SYNTAX_Cuesheet
+  SYNTAX_D
+  SYNTAX_Dart
+  SYNTAX_DCL
+  SYNTAX_DCPU_16
+  SYNTAX_DCS
+  SYNTAX_Delphi
+  SYNTAX_Delphi_Prism_Oxygene
+  SYNTAX_Diff
+  SYNTAX_DIV
+  SYNTAX_DOT
+  SYNTAX_E
+  SYNTAX_Easytrieve
+  SYNTAX_ECMAScript
+  SYNTAX_Eiffel
+  SYNTAX_Email
+  SYNTAX_EPC
+  SYNTAX_Erlang
+  SYNTAX_Euphoria
+  SYNTAX_F#
+  SYNTAX_Falcon
+  SYNTAX_Filemaker
+  SYNTAX_FO_Language
+  SYNTAX_Formula_One
+  SYNTAX_Fortran
+  SYNTAX_FreeBasic
+  SYNTAX_FreeSWITCH
+  SYNTAX_GAMBAS
+  SYNTAX_Game_Maker
+  SYNTAX_GDB
+  SYNTAX_Genero
+  SYNTAX_Genie
+  SYNTAX_GetText
+  SYNTAX_Go
+  SYNTAX_Groovy
+  SYNTAX_GwBasic
+  SYNTAX_Haskell
+  SYNTAX_Haxe
+  SYNTAX_HicEst
+  SYNTAX_HQ9_Plus
+  SYNTAX_HTML
+  SYNTAX_HTML_5
+  SYNTAX_Icon
+  SYNTAX_IDL
+  SYNTAX_INI_file
+  SYNTAX_Inno_Script
+  SYNTAX_INTERCAL
+  SYNTAX_IO
+  SYNTAX_ISPF_Panel_Definition
+  SYNTAX_J
+  SYNTAX_Java
+  SYNTAX_Java_5
+  SYNTAX_JavaScript
+  SYNTAX_JCL
+  SYNTAX_jQuery
+  SYNTAX_JSON
+  SYNTAX_Julia
+  SYNTAX_KiXtart
+  SYNTAX_Kotlin
+  SYNTAX_Latex
+  SYNTAX_LDIF
+  SYNTAX_Liberty_BASIC
+  SYNTAX_Linden_Scripting
+  SYNTAX_Lisp
+  SYNTAX_LLVM
+  SYNTAX_Loco_Basic
+  SYNTAX_Logtalk
+  SYNTAX_LOL_Code
+  SYNTAX_Lotus_Formulas
+  SYNTAX_Lotus_Script
+  SYNTAX_LScript
+  SYNTAX_Lua
+  SYNTAX_M68000_Assembler
+  SYNTAX_MagikSF
+  SYNTAX_Make
+  SYNTAX_MapBasic
+  SYNTAX_Markdown
+  SYNTAX_MatLab
+  SYNTAX_mIRC
+  SYNTAX_MIX_Assembler
+  SYNTAX_Modula_2
+  SYNTAX_Modula_3
+  SYNTAX_Motorola_68000_HiSoft_Dev
+  SYNTAX_MPASM
+  SYNTAX_MXML
+  SYNTAX_MySQL
+  SYNTAX_Nagios
+  SYNTAX_NetRexx
+  SYNTAX_newLISP
+  SYNTAX_Nginx
+  SYNTAX_Nimrod
+  SYNTAX_None
+  SYNTAX_NullSoft_Installer
+  SYNTAX_Oberon_2
+  SYNTAX_Objeck_Programming_Langua
+  SYNTAX_Objective_C
+  SYNTAX_OCalm_Brief
+  SYNTAX_OCaml
+  SYNTAX_Octave
+  SYNTAX_Open_Object_Rexx
+  SYNTAX_OpenBSD_PACKET_FILTER
+  SYNTAX_OpenGL_Shading
+  SYNTAX_Openoffice_BASIC
+  SYNTAX_Oracle_11
+  SYNTAX_Oracle_8
+  SYNTAX_Oz
+  SYNTAX_ParaSail
+  SYNTAX_PARI_GP
+  SYNTAX_Pascal
+  SYNTAX_Pawn
+  SYNTAX_PCRE
+  SYNTAX_Per
+  SYNTAX_Perl
+  SYNTAX_Perl_6
+  SYNTAX_PHP
+  SYNTAX_PHP_Brief
+  SYNTAX_Pic_16
+  SYNTAX_Pike
+  SYNTAX_Pixel_Bender
+  SYNTAX_PL_I
+  SYNTAX_PL_SQL
+  SYNTAX_PostgreSQL
+  SYNTAX_PostScript
+  SYNTAX_POV_Ray
+  SYNTAX_PowerBuilder
+  SYNTAX_PowerShell
+  SYNTAX_ProFTPd
+  SYNTAX_Progress
+  SYNTAX_Prolog
+  SYNTAX_Properties
+  SYNTAX_ProvideX
+  SYNTAX_Puppet
+  SYNTAX_PureBasic
+  SYNTAX_PyCon
+  SYNTAX_Python
+  SYNTAX_Python_for_S60
+  SYNTAX_q_kdb_plus
+  SYNTAX_QBasic
+  SYNTAX_QML
+  SYNTAX_R
+  SYNTAX_Racket
+  SYNTAX_Rails
+  SYNTAX_RBScript
+  SYNTAX_REBOL
+  SYNTAX_REG
+  SYNTAX_Rexx
+  SYNTAX_Robots
+  SYNTAX_RPM_Spec
+  SYNTAX_Ruby
+  SYNTAX_Ruby_Gnuplot
+  SYNTAX_Rust
+  SYNTAX_SAS
+  SYNTAX_Scala
+  SYNTAX_Scheme
+  SYNTAX_Scilab
+  SYNTAX_SCL
+  SYNTAX_SdlBasic
+  SYNTAX_Smalltalk
+  SYNTAX_Smarty
+  SYNTAX_SPARK
+  SYNTAX_SPARQL
+  SYNTAX_SQF
+  SYNTAX_SQL
+  SYNTAX_StandardML
+  SYNTAX_StoneScript
+  SYNTAX_SuperCollider
+  SYNTAX_Swift
+  SYNTAX_SystemVerilog
+  SYNTAX_T_SQL
+  SYNTAX_TCL
+  SYNTAX_Tera_Term
+  SYNTAX_thinBasic
+  SYNTAX_TypoScript
+  SYNTAX_Unicon
+  SYNTAX_UnrealScript
+  SYNTAX_UPC
+  SYNTAX_Urbi
+  SYNTAX_Vala
+  SYNTAX_VB_NET
+  SYNTAX_VBScript
+  SYNTAX_Vedit
+  SYNTAX_VeriLog
+  SYNTAX_VHDL
+  SYNTAX_VIM
+  SYNTAX_Visual_Pro_Log
+  SYNTAX_VisualBasic
+  SYNTAX_VisualFoxPro
+  SYNTAX_WhiteSpace
+  SYNTAX_WHOIS
+  SYNTAX_Winbatch
+  SYNTAX_XBasic
+  SYNTAX_XML
+  SYNTAX_Xorg_Config
+  SYNTAX_XPP
+  SYNTAX_YAML
+  SYNTAX_Z80_Assembler
+  SYNTAX_ZXBasic
+}

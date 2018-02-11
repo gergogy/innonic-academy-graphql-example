@@ -1,0 +1,35 @@
+{
+  "name": "graphql-eloadas",
+  "version": "1.0.0",
+  "description": "GraphQL application demo",
+  "main": "index.js",
+  "scripts": {
+    "installNstart": "npm install && node index",
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gergogy/innonic-academy-graphql-example.git"
+  },
+  "author": "Gergő Gyulai <gergo.gyulai@innonic.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gergogy/innonic-academy-graphql-example/issues"
+  },
+  "homepage": "https://github.com/gergogy/innonic-academy-graphql-example#readme",
+  "dependencies": {
+    "dataloader": "^1.4.0",
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
+    "github-api": "^3.0.0",
+    "graphql": "^0.13.0",
+    "graphql-errors": "^2.1.0",
+    "graphql-tools": "^2.20.1",
+    "node-cron": "^1.2.1",
+    "node-fetch": "^2.0.0",
+    "pastebin-js": "^0.5.1",
+    "sort-array": "^2.0.0",
+    "xml2js": "^0.4.19"
+  }
+}
