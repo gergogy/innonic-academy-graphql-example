@@ -17,7 +17,7 @@ cron.schedule('*/1 * * * *', () => {
     getUserInfo()
   }, true)
 
-maskErrors(schema)
+//maskErrors(schema)
 
 app.use('/graphql', graphqlHTTP(req => {
   const startTime = Date.now()
@@ -25,7 +25,7 @@ app.use('/graphql', graphqlHTTP(req => {
     schema: schema,
     graphiql: true,
     extensions: (/*{ document, variables, operationName, result }*/) => ({
-      timing: Date.now() - startTime,
+      timing: Date.now() - startTime
     })
   }
 }))

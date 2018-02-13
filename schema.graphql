@@ -52,7 +52,7 @@ type Book {
 }
 
 """
-String, starts with http(s)://)
+String, starts with http(s)://
 """
 scalar Url
 
@@ -92,6 +92,7 @@ type Query {
   listUserPastes(limit: Int = 3): [PastebinPasteDetailed]!
   listTrendingPastes(count: Int = 5): [PastebinPasteDetailed]
   pastebinUserInfo: UserInfo
+  toTimestamp(date: String): Date
 }
 
 """

@@ -14,8 +14,46 @@ const pastebinPrivacy = [
   'PUBLIC_USER'
 ]
 const pastebinFormats = require('./pastebin/formats')
+const Kind = require('graphql/language').Kind
 
 module.exports = {
+  Date: {
+    serialize: value => {
+      if (!(value instanceof Date)) {
+        throw new TypeError(`Value is a '${typeof value}' instead of 'Date'`)
+      }
+
+      return value.getTime()
+    },
+
+    parseValue: value => {
+      const date = new Date(value)
+
+      if (isNaN(date.getTime())) {
+        throw new TypeError(`${value} is not a valid 'Date'`);
+      }
+
+      return date;
+    },
+
+    parseLiteral: AST => { // Abstract Syntax Tree
+      if (AST.kind !== Kind.STRING) {
+        throw new GraphQLError(`Can only parse strings to dates but got a: ${AST.kind}`)
+      }
+
+      const date = new Date(AST.value)
+
+      if (isNaN(date.getTime())) {
+        throw new GraphQLError(`${AST.value} is not a valid 'Date'`)
+      }
+
+      if (AST.value !== date.toISOString()) {
+        throw new GraphQLError(`Value is not a valid ISO format: ${AST.value}`);
+      }
+
+      return date
+    }
+  },
   Book: {
     id: xml => xml.GoodreadsResponse.book[0].id[0],
     title: (xml, { lang }) => {
@@ -56,7 +94,7 @@ module.exports = {
   },
   PastebinPasteDetailed: {
     id: data => data.paste_key,
-    date: data => (new Date(parseInt(data.paste_date, 10)*1000)).toISOString(),
+    date: data => new Date(parseInt(data.paste_date, 10)*1000),
     title: data => data.paste_title.length ? data.paste_title : null,
     privacy: data => privacyLevelToPrivacy[parseInt(data.paste_private)],
     hits: data => data.paste_hits,
@@ -78,7 +116,8 @@ module.exports = {
     paste: (_, { id }) => loaders.pasteLoader.load(id),
     listUserPastes: (_, { limit }) => pasteBin.listUserPastes(limit),
     listTrendingPastes: (_, { count }, ctx) => ctx.app.get('pasteTrends').slice(0, count),
-    pastebinUserInfo: (_, __, ctx) => ctx.app.get('userInfo')
+    pastebinUserInfo: (_, __, ctx) => ctx.app.get('userInfo'),
+    toTimestamp: (_, { date }) => new Date(date)
   },
   Mutation: {
     createPaste: (_, { input }) =>
